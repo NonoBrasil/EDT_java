@@ -29,7 +29,8 @@ public class Graphique extends JFrame {
         
         this.setMinimumSize(new Dimension(800, 600));   //On Donne une dimention minimum de 800 par 600
         this.setLocationRelativeTo(null);      //On décale la position originelle de la fenêtre en centrant sur le bureau
-
+        this.getContentPane().setBackground( Color.white );
+        
         this.setJMenuBar(createMenuBar());
         JPanel mainpage = (JPanel) this.getContentPane();    //On stock un JPanel qui sera la page principale
         //SpringLayout springLayout = new SpringLayout();
@@ -141,17 +142,14 @@ public class Graphique extends JFrame {
     private JPanel createhour(){      
         JPanel heureAligned = new JPanel(new BorderLayout());
         JPanel heure = new JPanel(new GridLayout(14,1)); //On créé un Panel avec 14 case en grid
+        //heure.setBackground(Color.white);
+        //heureAligned.setBackground(Color.white);
         String text;
-        javax.swing.border.Border border = BorderFactory.createLineBorder(Color.black, 1);      //On définit la bordure
         JLabel label = new JLabel();
         label.setPreferredSize(new Dimension(60,40));
-        /*JLabel blank = new JLabel(" " ,JLabel.RIGHT);
-        blank.setPreferredSize(new Dimension(60,40));
-        heure.add(blank);*/
         for (int i=0;i<14;i++){
             text = String.valueOf(i+8)+"h30";
             label = new JLabel(text ,JLabel.RIGHT);
-            //label.setBorder(border);
             heure.add(label);    //On créé les 14 cases par jour
         }
         heureAligned.add(new JLabel(" " ,JLabel.RIGHT),BorderLayout.NORTH);
@@ -180,7 +178,7 @@ public class Graphique extends JFrame {
         return col;
     }
     
-    public static void main(String[] args) throws Exception
+    /*public static void main(String[] args) throws Exception
     {
         NimbusLookAndFeel nimbus = new NimbusLookAndFeel();
         //SynthLookAndFeel synth = new SynthLookAndFeel();
@@ -189,6 +187,6 @@ public class Graphique extends JFrame {
         Graphique window = new Graphique();
         window.setVisible(true);
                 
-    }
+    }*/
 }
 
