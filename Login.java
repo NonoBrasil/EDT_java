@@ -13,42 +13,60 @@ import java.util.*;
  * @author Noémie
  */
 public class Login {
-    Connection maconnexion = null;
-    Statement stmt = null;
     ResultSet resultSet = null;
-    //URL pour acceder à la base de donnee
-    String url = "jdbc:mysql://localhost:3306/bdd";
-    //identifiant pour acceder a la base de donnee
-    String user = "root";
-    //Mot de passe pour acceder a la base de donnee
-    String pass = "";
     //numero d'identifiant de l'utilisateur
     private int identifiant;
+    Connect_base con;   //creation de la connexion de la base
     
     public Login(){
         //constructeur
     }
+    
     public void connecter(){
         //IDENTIFIANT ENTRE DANS LE FORMULAIRE DE CONNEXION
-        String ident="segado@edu.ece.fr";
+        String ident="noemie.pasquier@edu.ece.fr";
         //MOT DE PASSE ENTRE DANS LE FORMULAIRE DE CONNEXION
-        String mdp="jp";
+        String mdp="azerty";
         
         try{
-            //Connexion con = new Connexion();
-            //ident= con.getEmail();
-            //mdp= con.getMdp();
-            //création d'une connexion JDBC à la base 
-            maconnexion = DriverManager.getConnection(url, user, pass);
-            // création d'un ordre SQL (statement)
-            stmt = maconnexion.createStatement();
-            //on envoie la requete et on recupere le resultat
-            resultSet = stmt.executeQuery("SELECT id FROM utilisateur WHERE (email='"+ident+"') AND (passwd='"+mdp+"');");
+            //requete pour le login
+            String req="SELECT id FROM utilisateur WHERE (email='"+ident+"') AND (passwd='"+mdp+"');";
+            //on créée une connexion
+            con = new Connect_base();
+            //recuperation du resultat de la requete
+            resultSet=con.connexion(req);
+            System.out.println(resultSet);
             //on passe à la ligne suivante car titre des variables
             resultSet.next();
             //on recupère l'id de l'utilisateur
             int num_id= resultSet.getInt("id");
             System.out.println("ID utilisateur connecté: "+num_id);
+            identifiant=num_id;
+            //DEFINIR LE TYPE D'UTILISATEUR
+            req="SELECT droit FROM utilisateur WHERE (id='"+num_id+"');";
+            resultSet = con.connexion(req);
+            //on passe à la ligne suivante car titre des variables
+            resultSet.next();
+            //on recupère le droit de l'utilisateur
+            int num_droit= resultSet.getInt("droit");
+            System.out.println("Droit de l'utilisateur: "+num_droit);
+            //redirection vers la classe de l'utilisateur en fonction de ses droits
+            switch(num_droit) {
+                case 1:
+                    // cas droit administrateur
+                    break;
+                case 2:
+                    // cas droit referent pedagogique
+                break;
+                case 3:
+                    // cas droit enseignant
+                    break;
+                case 4:
+                    // cas droit etudiant
+                    
+                break;
+                
+            }
                 
         }catch (SQLException e) {
                 System.out.println("Connexion echouee : probleme SQL");
@@ -57,7 +75,7 @@ public class Login {
     }
     
     // Getter pour l'id
-    public int getId() {
+    public int getIdentifiant() {
         return identifiant; //retourne l'identifiant de l'utilisateur connecté
     }
 }
