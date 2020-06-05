@@ -6,11 +6,16 @@ package Vue;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import javax.swing.BorderFactory;
 
 public class Graphique extends JFrame {
 
     //Initialise la page vue par l'utilisateur
+    private boolean grille = true;
+    JPanel mainpage;
+            
     public Graphique() {
 
         super("Emploi du temps ECE");
@@ -21,14 +26,22 @@ public class Graphique extends JFrame {
         this.getContentPane().setBackground( Color.white );
         
         this.setJMenuBar(createMenuBar());
-        JPanel mainpage = (JPanel) this.getContentPane();    //On stock un JPanel qui sera la page principale
-        //SpringLayout springLayout = new SpringLayout();
-        //FlowLayout flowLayout = new FlowLayout(FlowLayout.LEADING);
-        //GridLayout gridLayout = new GridLayout(2,2);   //Affichage en grille dans ce cas on a 24 ligne et 1 colonne
+        mainpage = (JPanel) this.getContentPane();    //On stock un JPanel qui sera la page principale
         mainpage.setLayout(new BorderLayout());
+        grid();
+            
+    }
+    
+    private void grid (){
         mainpage.add(createtoolbar(),BorderLayout.NORTH);
         mainpage.add(createhour(),BorderLayout.WEST);
         mainpage.add(createweek(7),BorderLayout.CENTER);
+    }
+    
+    private void liste (){
+        mainpage.removeAll();
+        mainpage.add(createtoolbar(),BorderLayout.NORTH);
+        //mainpage.add(createlist(),BorderLayout.CENTER);
     }
     
     //Initialise la barre de menu
@@ -46,9 +59,24 @@ public class Graphique extends JFrame {
         JToolBar tb = new JToolBar();
         JComboBox typeAction = new JComboBox(typeAffStrings);
         JComboBox userAction = new JComboBox(utilisateurStrings);
-        typeAction.setSelectedIndex(0);
-        userAction.setSelectedIndex(0);
-        //listeAction.addActionListener(this);
+        if(!grille)
+            typeAction.setSelectedIndex(1);
+        typeAction.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent ae) {
+                if (ae.getStateChange() == ItemEvent.SELECTED) {
+                    if(ae.getItem().equals("En liste")){
+                        grille=false;
+                        liste();
+                    }
+                    else{
+                        grille=true;
+                        grid();
+                    }
+                    
+                }
+            }
+        });
         tb.add(typeAction);
         tb.add(userAction);
         return tb;
@@ -165,6 +193,11 @@ public class Graphique extends JFrame {
                 break;
         }
         return col;
+    }
+    
+    //En cours d'implementation
+    private JPanel createlist(){
+        return null;
     }
     
     /*public static void main(String[] args) throws Exception

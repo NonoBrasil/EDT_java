@@ -30,7 +30,6 @@ public class Connexion extends JFrame{
     private String password_value;
     
     public Connexion() {
-
         super("Connexion emploi du temps ECE");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //On arrête les processus de la fenêtre en ne fermant le programme que quand la dernière fenêtre est encore ouverte
         
@@ -51,6 +50,7 @@ public class Connexion extends JFrame{
         mainpage.add(mid,BorderLayout.CENTER);
     }
     
+    //Créer la partie centrale du login
     private JPanel createbody(){
         //String[] utilisateurStrings = { "Elève", "Enseignant", "Admin"};   //Utilisateur
         JPanel body = new JPanel(new GridLayout(8,1));
@@ -107,6 +107,7 @@ public class Connexion extends JFrame{
         return body;
     }
     
+    //Getters
     public String getMdp(){
         return password_value;
     }
@@ -118,7 +119,6 @@ public class Connexion extends JFrame{
     public static void main(String[] args) throws Exception
     {
         NimbusLookAndFeel nimbus = new NimbusLookAndFeel();
-        //SynthLookAndFeel synth = new SynthLookAndFeel();
         UIManager.setLookAndFeel( nimbus );
         
         Connexion window = new Connexion();
