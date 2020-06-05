@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+//import javax.swing.JComboBox;
 
 /**
  * @author paulm
@@ -26,6 +26,8 @@ public class Connexion extends JFrame{
     private final JButton login = new JButton("Login");
     private final JButton annuler = new JButton("Annuler");
     float fontsize = 30.0f;
+    private String email_value;
+    private String password_value;
     
     public Connexion() {
 
@@ -50,10 +52,10 @@ public class Connexion extends JFrame{
     }
     
     private JPanel createbody(){
-        String[] utilisateurStrings = { "Elève", "Enseignant", "Admin"};   //Utilisateur
+        //String[] utilisateurStrings = { "Elève", "Enseignant", "Admin"};   //Utilisateur
         JPanel body = new JPanel(new GridLayout(8,1));
         
-        JLabel label = new JLabel("Nom d'utilisateur");
+        JLabel label = new JLabel("Email");
         label.setFont (label.getFont ().deriveFont (fontsize));
         body.add(label);
         user.setFont (user.getFont ().deriveFont (fontsize-10));
@@ -65,12 +67,12 @@ public class Connexion extends JFrame{
         mdp.setFont (mdp.getFont ().deriveFont (fontsize-10));
         body.add(mdp);
         
-        label = new JLabel("Type d'utilisateur");
+        /*label = new JLabel("Type d'utilisateur");
         label.setFont (label.getFont ().deriveFont (fontsize));
         body.add(label);
         JComboBox selection = new JComboBox(utilisateurStrings);
         selection.setFont (selection.getFont ().deriveFont (fontsize-10));
-        body.add(selection);
+        body.add(selection);*/
         
         body.add(new JLabel(""));       //Blank space
         
@@ -79,9 +81,15 @@ public class Connexion extends JFrame{
         login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                Graphique g = new Graphique();
-                g.setVisible(true);
-                dispose();
+                email_value = user.getText();
+                password_value = mdp.getText();
+                if((email_value.equals("Paul"))&&(password_value.equals("mdp"))){       //Test des identifiants
+                    System.out.println(email_value+" "+password_value);
+                    Graphique g = new Graphique();
+                    g.setVisible(true);
+                    dispose();
+                }
+                //System.out.println(email+" "+password);
             }
         });
         choix.add(login);
@@ -99,6 +107,14 @@ public class Connexion extends JFrame{
         return body;
     }
     
+    public String getMdp(){
+        return password_value;
+    }
+    
+    public String getEmail(){
+        return email_value;
+    }
+    
     public static void main(String[] args) throws Exception
     {
         NimbusLookAndFeel nimbus = new NimbusLookAndFeel();
@@ -110,6 +126,4 @@ public class Connexion extends JFrame{
         window.setVisible(true);
                 
     }
-
-    
 }

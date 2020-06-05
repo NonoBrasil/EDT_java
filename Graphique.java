@@ -6,18 +6,7 @@ package Vue;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.event.ItemListener;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.List;
-import javafx.scene.layout.Border;
 import javax.swing.BorderFactory;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-import javax.swing.plaf.synth.SynthLookAndFeel;
 
 public class Graphique extends JFrame {
 
