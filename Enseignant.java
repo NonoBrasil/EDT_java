@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package Modele;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
@@ -12,42 +11,32 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
 /**
  *
  * @author Noémie
  */
-public class Etudiant {
+public class Enseignant {
     //attributs
     Login log;
     Connect_base con;
     ResultSet resultSet = null;
-    private int id_etudiant;
-    private int id_groupe;
+    private int id_enseignant;
     ArrayList<Seance> liste_seances=new ArrayList<>();  //declaration d'une liste de seances
     int nb_seances;
-    public Etudiant(Login entrar){
+    
+    public Enseignant(Login entrar){
         //constructeur
-        this.log=entrar;//on recupère le login de l'etudiant
-        id_etudiant=log.getIdentifiant();   //via le login on recupère l'ID de l'étudiant
+        this.log=entrar;//on recupère le login de l'enseignant
+        id_enseignant=log.getIdentifiant();   //via le login on recupère l'ID de l'enseignant
     }
     
     public void liste_cours(){
         con = new Connect_base();   //creation de la connexion a la base
-        try{
-            
-            //requete pour le groupe de l'étudiant
-            String req = "SELECT id_groupe FROM etudiant WHERE (id_utilisateur="+id_etudiant+");";
+        try{            
+            //requete pour recuperer les sceances de l'enseignant
+            String req="SELECT id_seance FROM seance_enseignants WHERE id_enseignant="+id_enseignant+";";
             resultSet=con.connexion(req);
-            //on passe à la ligne suivante car titre des variables
-            resultSet.next();
-            //on recupère le groupe de l'etudiant
-            this.id_groupe=resultSet.getInt("id_groupe");
-            
-            //requete pour recuperer les sceances du groupe
-            req="SELECT id_seance FROM seance_groupes WHERE id_groupe="+id_groupe+";";
-            resultSet=con.connexion(req);
-            //recuperation de toutes les seances avec l'id de la seance
+            //recuperation de toutes les seances avec l'id de l'enseignant
             int id_seance = 0;
             ResultSet resultSetSeance=null;
             while(resultSet.next()){
@@ -78,7 +67,7 @@ public class Etudiant {
                 sessao.setCours(resultSetSeance.getInt("id_cours"));
                 //initialiser l'id du type de la seance "SESSAO"
                 sessao.setType(resultSetSeance.getInt("id_type"));
-                sessao.dataPlus();
+                sessao.dataPlus();                
                 //on rajoute la seance dans le tableau dynamique "liste_seances" 
                 liste_seances.add(sessao);
             }

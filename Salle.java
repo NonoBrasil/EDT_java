@@ -17,75 +17,68 @@ import java.util.Comparator;
  *
  * @author Noémie
  */
-public class Etudiant {
-    //attributs
-    Login log;
+public class Salle {
+    private int id_salle;
     Connect_base con;
     ResultSet resultSet = null;
-    private int id_etudiant;
-    private int id_groupe;
     ArrayList<Seance> liste_seances=new ArrayList<>();  //declaration d'une liste de seances
     int nb_seances;
-    public Etudiant(Login entrar){
+    
+    public Salle(int num_salle){
         //constructeur
-        this.log=entrar;//on recupère le login de l'etudiant
-        id_etudiant=log.getIdentifiant();   //via le login on recupère l'ID de l'étudiant
+        id_salle = num_salle;
     }
     
     public void liste_cours(){
         con = new Connect_base();   //creation de la connexion a la base
-        try{
-            
-            //requete pour le groupe de l'étudiant
-            String req = "SELECT id_groupe FROM etudiant WHERE (id_utilisateur="+id_etudiant+");";
+        try{ 
+            //requete pour recuperer les sceances de l'enseignant
+            String req="SELECT id_seance FROM seance_salles WHERE id_salle="+id_salle+";";
             resultSet=con.connexion(req);
-            //on passe à la ligne suivante car titre des variables
-            resultSet.next();
-            //on recupère le groupe de l'etudiant
-            this.id_groupe=resultSet.getInt("id_groupe");
+            if(resultSet!=null){
+                //recuperation de toutes les seances avec l'id de la salle
+                int id_seance = 0;
+                ResultSet resultSetSeance=null;
+                while(resultSet.next()){
+                    //on recupere l'id de la seance
+                    id_seance=resultSet.getInt("id_seance");
+                    System.out.println("ID SEANCE : "+id_seance);
+                    //requette pour recuperer toute la data de la seance
+                    req="SELECT * FROM seance WHERE id='"+id_seance+"';";
+                    //recuperation de la reponse de la requette
+                    resultSetSeance=con.connexion(req);
+                    //on passe à la ligne suivante car titre des variables
+                    resultSetSeance.next();
+                    //creation d'une seance
+                    Seance sessao = new Seance();
+                    //initialiser l'id de la seance "SESSAO"
+                    sessao.setId(id_seance);
+                    //initialiser la semaine de la seance "SESSAO"
+                    sessao.setWeek(resultSetSeance.getInt("semaine"));
+                    //initialiser le jour de la seance "SESSAO"
+                    sessao.setDay(resultSetSeance.getDate("jour"));
+                    //initialiser l'heure du debut de la seance "SESSAO"
+                    sessao.setTimeD(resultSetSeance.getTime("heure_debut"));
+                    //initialiser l'heure de la fin de la seance "SESSAO"
+                    sessao.setTimeF(resultSetSeance.getTime("heure_fin"));
+                    //initialiser l'etat de la seance "SESSAO"
+                    sessao.setEtat(resultSetSeance.getInt("etat"));
+                    //initialiser l'id du cours de la seance "SESSAO"
+                    sessao.setCours(resultSetSeance.getInt("id_cours"));
+                    //initialiser l'id du type de la seance "SESSAO"
+                    sessao.setType(resultSetSeance.getInt("id_type"));
+                    sessao.dataPlus();
+                    //on rajoute la seance dans le tableau dynamique "liste_seances" 
+                    liste_seances.add(sessao);
+                }
             
-            //requete pour recuperer les sceances du groupe
-            req="SELECT id_seance FROM seance_groupes WHERE id_groupe="+id_groupe+";";
-            resultSet=con.connexion(req);
-            //recuperation de toutes les seances avec l'id de la seance
-            int id_seance = 0;
-            ResultSet resultSetSeance=null;
-            while(resultSet.next()){
-                //on recupere l'id de la seance
-                id_seance=resultSet.getInt("id_seance");
-                System.out.println("ID SEANCE : "+id_seance);
-                //requette pour recuperer toute la data de la seance
-                req="SELECT * FROM seance WHERE id='"+id_seance+"';";
-                //recuperation de la reponse de la requette
-                resultSetSeance=con.connexion(req);
-                //on passe à la ligne suivante car titre des variables
-                resultSetSeance.next();
-                //creation d'une seance
-                Seance sessao = new Seance();
-                //initialiser l'id de la seance "SESSAO"
-                sessao.setId(id_seance);
-                //initialiser la semaine de la seance "SESSAO"
-                sessao.setWeek(resultSetSeance.getInt("semaine"));
-                //initialiser le jour de la seance "SESSAO"
-                sessao.setDay(resultSetSeance.getDate("jour"));
-                //initialiser l'heure du debut de la seance "SESSAO"
-                sessao.setTimeD(resultSetSeance.getTime("heure_debut"));
-                //initialiser l'heure de la fin de la seance "SESSAO"
-                sessao.setTimeF(resultSetSeance.getTime("heure_fin"));
-                //initialiser l'etat de la seance "SESSAO"
-                sessao.setEtat(resultSetSeance.getInt("etat"));
-                //initialiser l'id du cours de la seance "SESSAO"
-                sessao.setCours(resultSetSeance.getInt("id_cours"));
-                //initialiser l'id du type de la seance "SESSAO"
-                sessao.setType(resultSetSeance.getInt("id_type"));
-                sessao.dataPlus();
-                //on rajoute la seance dans le tableau dynamique "liste_seances" 
-                liste_seances.add(sessao);
+                //TRI DE LA LISTE DE SEANCE 
+                tri();//appel de la fonction tri
             }
-            
-            //TRI DE LA LISTE DE SEANCE 
-            tri();//appel de la fonction tri
-            
+            else{
+                //pas de seance dans la salle
+            }
+                        
         }catch (SQLException e) {
                 System.out.println("Connexion echouee : probleme SQL");
                 e.printStackTrace();
