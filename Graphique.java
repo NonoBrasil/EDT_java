@@ -4,10 +4,12 @@ package Vue;
  * @author paulm
 */
 
+import Model.Seance;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 
 public class Graphique extends JFrame {
@@ -15,6 +17,7 @@ public class Graphique extends JFrame {
     //Initialise la page vue par l'utilisateur
     private boolean grille = true;
     JPanel mainpage;
+    ArrayList<ArrayList<Seance>> liste_seances=new ArrayList<>();  //declaration d'une liste de seances
             
     public Graphique() {
 
@@ -25,6 +28,7 @@ public class Graphique extends JFrame {
         this.setLocationRelativeTo(null);      //On décale la position originelle de la fenêtre en centrant sur le bureau
         this.getContentPane().setBackground( Color.white );
         
+        remplirtest();
         this.setJMenuBar(createMenuBar());
         mainpage = (JPanel) this.getContentPane();    //On stock un JPanel qui sera la page principale
         mainpage.setLayout(new BorderLayout());
@@ -33,15 +37,16 @@ public class Graphique extends JFrame {
     }
     
     private void grid (){
+        mainpage.removeAll();
         mainpage.add(createtoolbar(),BorderLayout.NORTH);
         mainpage.add(createhour(),BorderLayout.WEST);
-        mainpage.add(createweek(7),BorderLayout.CENTER);
+        mainpage.add(createweek(),BorderLayout.CENTER);
     }
     
     private void liste (){
         mainpage.removeAll();
         mainpage.add(createtoolbar(),BorderLayout.NORTH);
-        //mainpage.add(createlist(),BorderLayout.CENTER);
+        mainpage.add(createlist(),BorderLayout.CENTER);
     }
     
     //Initialise la barre de menu
@@ -83,13 +88,11 @@ public class Graphique extends JFrame {
     }
     
     //Initialise la grille d'une semaine
-    private JPanel createweek(int date){      
-        JPanel semaine = new JPanel(new GridLayout(1,7)); //On créé un Panel avec 24 case en grid
-        String j;
-        for (int i=0;i<7;i++){
-            j=getDay(i);
-            j+= " " + String.valueOf(i+date);
-            semaine.add(createday(j));
+    private JPanel createweek(){      
+        JPanel semaine = new JPanel(new GridLayout(1,6)); //On créé un Panel avec 24 case en grid
+        
+        for (int i=0;i<6;i++){
+            semaine.add(createday(i));
         }
         return semaine;
     }
@@ -126,30 +129,37 @@ public class Graphique extends JFrame {
     }
     
     //Initialise la grille d'une journée
-    private JPanel createday(String j){       
+    private JPanel createday(int j){       
         JPanel jour = new JPanel(new GridLayout(15,1)); //On créé un Panel avec 14 case en grid
         javax.swing.border.Border border = BorderFactory.createLineBorder(Color.black, 1);      //On définit la bordure
+        String hour;
         String text;
         JLabel cours;
-        JLabel title = new JLabel(j ,JLabel.HORIZONTAL);
+        String day = getDay(j);
+        day+= " " + String.valueOf(j);
+        JLabel title = new JLabel(day+"" ,JLabel.HORIZONTAL);
         //Icon test =  new Icon();
         title.setBorder(border);
         jour.add(title);     //On indique le jour de la semaine
         
-        
-        for (int i=0;i<13;i++){                         //On créé les 13 cases par jour
-            text = String.valueOf(i+1);
-            if (i==3)
-                text="Elec";
-            if (i==6)
-                text="Infos";
-            if (i==10)
-                text="Maths";
+        for (int i=0;i<13;i++){                         //On créé les 13 cases par jour (0==8h30 et 12==20h30)
+            hour = "";
+            text="";
+            Color col=Color.lightGray;
+            hour=8+i+"h30";
+            for(int u = 0 ; u < liste_seances.get(j).size(); u++){
+                if (hour.equals(liste_seances.get(j).get(u).getTimeD())){
+                    text=liste_seances.get(j).get(u).getId()+", "+liste_seances.get(j).get(u).getEtat();
+                    col = getCol(liste_seances.get(j).get(u).getCours());
+                }
+            }
+            
             cours = new JLabel(text ,JLabel.HORIZONTAL);
-            cours.setBackground(getCol(text));
+            cours.setBackground(col);
             cours.setBorder(border);
             cours.setOpaque(true);
-            jour.add(cours);    
+            jour.add(cours);   
+            
         }
         jour.add(new JLabel(" " ,JLabel.HORIZONTAL));
         return jour;
@@ -176,17 +186,20 @@ public class Graphique extends JFrame {
     }
     
     //Renvoie la couleur assignée au cours
-    private Color getCol(String classe){        
+    private Color getCol(int id_cours){        
         Color col;
-        switch(classe){
-            case "Elec":
+        switch(id_cours){
+            case 0:
                 col=Color.white;
                 break;
-            case "Maths":
+            case 1:
                 col=Color.red;
                 break;
-            case "Infos":
+            case 2:
                 col=Color.pink;
+                break;
+            case 3:
+                col=Color.cyan;
                 break;
             default:
                 col=Color.lightGray;
@@ -197,7 +210,38 @@ public class Graphique extends JFrame {
     
     //En cours d'implementation
     private JPanel createlist(){
-        return null;
+        JPanel list = new JPanel(new GridLayout(liste_seances.size(),0));       //On créé une grille avec le nombre de cours
+        String text;
+        for(int j = 0 ; j < liste_seances.size(); j++){
+            for(int u = 0 ; u < liste_seances.get(j).size(); u++){
+                text=liste_seances.get(j).get(u).getId()+", "+liste_seances.get(j).get(u).getEtat();
+                list.add(new JLabel(text));
+            }
+        }
+        
+        return list;
+    }
+    
+    
+    private void remplirtest(){
+        Seance s = new Seance();
+        Seance s2 = new Seance();
+        
+        for(int j = 0 ; j < 6; j++){
+            liste_seances.add(new ArrayList<>());
+        }
+        
+        s.setId(0);
+        s.setCours(0);
+        s.setTimeD("9h30");
+        s.setEtat(1);
+        liste_seances.get(1).add(s);
+        
+        s2.setId(1);
+        s2.setCours(1);
+        s2.setTimeD("18h30");
+        s2.setEtat(1);
+        liste_seances.get(1).add(s2);
     }
     
     /*public static void main(String[] args) throws Exception

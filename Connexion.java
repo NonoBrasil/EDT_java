@@ -14,7 +14,6 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-//import javax.swing.JComboBox;
 
 /**
  * @author paulm
@@ -28,6 +27,8 @@ public class Connexion extends JFrame{
     float fontsize = 30.0f;
     private String email_value;
     private String password_value;
+    
+    private boolean log = false;            //Si la personne essaie de se log
     
     public Connexion() {
         super("Connexion emploi du temps ECE");
@@ -52,7 +53,6 @@ public class Connexion extends JFrame{
     
     //Créer la partie centrale du login
     private JPanel createbody(){
-        //String[] utilisateurStrings = { "Elève", "Enseignant", "Admin"};   //Utilisateur
         JPanel body = new JPanel(new GridLayout(8,1));
         
         JLabel label = new JLabel("Email");
@@ -67,13 +67,6 @@ public class Connexion extends JFrame{
         mdp.setFont (mdp.getFont ().deriveFont (fontsize-10));
         body.add(mdp);
         
-        /*label = new JLabel("Type d'utilisateur");
-        label.setFont (label.getFont ().deriveFont (fontsize));
-        body.add(label);
-        JComboBox selection = new JComboBox(utilisateurStrings);
-        selection.setFont (selection.getFont ().deriveFont (fontsize-10));
-        body.add(selection);*/
-        
         body.add(new JLabel(""));       //Blank space
         
         JPanel choix = new JPanel(new GridLayout(1,2));
@@ -83,8 +76,9 @@ public class Connexion extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 email_value = user.getText();
                 password_value = mdp.getText();
+                log = true;
                 if((email_value.equals("Paul"))&&(password_value.equals("mdp"))){       //Test des identifiants
-                    System.out.println(email_value+" "+password_value);
+                    //System.out.println(email_value+" "+password_value);
                     Graphique g = new Graphique();
                     g.setVisible(true);
                     dispose();
@@ -114,6 +108,14 @@ public class Connexion extends JFrame{
     
     public String getEmail(){
         return email_value;
+    }
+    
+    public boolean getlog(){
+        return log;
+    }
+    
+    public void setlogfalse(){
+        log = false;
     }
     
     public static void main(String[] args) throws Exception
