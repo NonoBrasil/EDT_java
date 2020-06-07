@@ -186,7 +186,7 @@ public class Graphique extends JFrame {
         java.sql.Time t;
         JLabel cours;
         String day = getDay(j);
-        day+= " " + String.valueOf(j);
+        day+= " " + String.valueOf(j+1);
         JLabel title = new JLabel(day+"" ,JLabel.HORIZONTAL);
         //Icon test =  new Icon();
         title.setBorder(border);
@@ -284,6 +284,7 @@ public class Graphique extends JFrame {
     private void remplirtest() throws ParseException{
         Seance s = new Seance();
         Seance s2 = new Seance();
+        Seance s3 = new Seance();
         
         for(int j = 0 ; j < 6; j++){
             liste_seances.add(new ArrayList<>());
@@ -291,22 +292,47 @@ public class Graphique extends JFrame {
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
         java.sql.Time t;
         java.sql.Time t2;
+        java.sql.Time t3;
         
         t = new java.sql.Time(formatter.parse("17:30:00").getTime());
         t2 = new java.sql.Time(formatter.parse("08:30:00").getTime());
+        t3 = new java.sql.Time(formatter.parse("11:30:00").getTime());
         
         s.setId(0);
         s.setCours(0);
         s.setTimeD(t);
         s.setEtat(1);
+        s.setNomCours("Java");
+        s.setNomGroupe("TD11");
+        s.setNomEnseignant("JP Segado");
+        s.setNomSalle("P445");
+        s.setCapacite(70);
+        s.setSite("E2");
         liste_seances.get(1).add(s);
         
         s2.setId(1);
         s2.setCours(1);
         s2.setTimeD(t2);
-        
         s2.setEtat(1);
+        s2.setNomCours("Maths");
+        s2.setNomGroupe("TD11");
+        s2.setNomEnseignant("M Chaari");
+        s2.setNomSalle("SC01");
+        s2.setCapacite(70);
+        s2.setSite("E1");
         liste_seances.get(1).add(s2);
+        
+        s3.setId(2);
+        s3.setCours(2);
+        s3.setTimeD(t3);
+        s3.setEtat(1);
+        s3.setNomCours("Sports");
+        s3.setNomGroupe("TD11");
+        s3.setNomEnseignant("M Propre");
+        s3.setNomSalle("SC02");
+        s3.setCapacite(30);
+        s3.setSite("E1");
+        liste_seances.get(3).add(s3);
     }
     
     //Créé l'écran de reporting
