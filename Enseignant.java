@@ -22,7 +22,17 @@ public class Enseignant {
     ResultSet resultSet = null;
     private int id_enseignant;
     ArrayList<Seance> liste_seances=new ArrayList<>();  //declaration d'une liste de seances
+    ArrayList<ArrayList<String>> recapitulatif=new ArrayList<>();
+    ArrayList<ArrayList<Seance>>liste_jours=new ArrayList<>();
     int nb_seances;
+    
+    ArrayList<Seance> lundi=new ArrayList<>();
+    ArrayList<Seance> mardi=new ArrayList<>();
+    ArrayList<Seance> mercredi=new ArrayList<>();
+    ArrayList<Seance> jeudi=new ArrayList<>();
+    ArrayList<Seance> vendredi=new ArrayList<>();
+    ArrayList<Seance> samedi=new ArrayList<>();
+        
     
     public Enseignant(Login entrar){
         //constructeur
@@ -74,6 +84,9 @@ public class Enseignant {
             
             //TRI DE LA LISTE DE SEANCE 
             tri();//appel de la fonction tri
+            
+            //TRI PAR JOUR DE LA SEMAINE
+            organizacao();
             
         }catch (SQLException e) {
                 System.out.println("Connexion echouee : probleme SQL");
@@ -148,5 +161,139 @@ public class Enseignant {
             //on appelle la fonction afficher_seance() pour afficher les données de la seance
             liste_seances.get(i).afficher_seance();
         }
+    }
+    
+    public void recapitulatifCours(){
+        //on recupère les cours du professeur 
+        int id_cours;
+        int id_seance;
+        int id_groupe;
+        ArrayList<String> ligne = new ArrayList<>();
+        Connect_base con = new Connect_base();   //creation de la connexion a la base
+        try{
+            //requete pour recuperer les sceances de l'enseignant
+            String req="SELECT id_cours FROM enseignant WHERE id_utilisateur="+id_enseignant+";";
+            ResultSet resultSet=con.connexion(req);
+            if(resultSet!=null){
+            //si le resultat de la requette n'est pas nul
+            while(resultSet.next()){
+                id_cours=resultSet.getInt("id_cours");
+                String req2 = "SELECT id FROM seance WHERE id_cours="+id_cours+";";
+                ResultSet resultSet2 = con.connexion(req2);
+                if(resultSet2!=null){
+                    while(resultSet2.next()){
+                        id_seance=resultSet2.getInt("id");
+                        String req3="SELECT id_groupe FROM seance_groupes WHERE id_seance="+id_seance+";";
+                        ResultSet resultSet3 = con.connexion(req3);
+                        if(resultSet3!=null){
+                            while(resultSet2.next()){
+                                id_groupe=resultSet3.getInt("id_groupe");
+                                String matiere;
+                                String premiere_seance;
+                                String dernière_seance;
+                                String duree;
+                                String nb;
+                                String req4="SELECT nom FROM cours WHERE id="+id_cours+";";
+                                ResultSet resultSet4 = con.connexion(req3);
+                                if(resultSet4!=null){
+                                    resultSet4.next();
+                                    matiere=resultSet4.getString("nom");
+                                    ligne.add(matiere);
+                                }
+                                String req5="SELECT heure_debut FROM seance WHERE (id="+id_seance+") AND (id_cours="+id_cours+") ORDER BY heure_debut ASC;";
+                            }
+                        }
+                    }
+                }
+                
+            }
+        }
+        }catch (SQLException e) {
+                System.out.println("Connexion echouee : probleme SQL");
+                e.printStackTrace();
+        }
+    }
+    
+    public void organizacao(){
+        Seance porra = new Seance();
+        int day=8;
+        Date jour=new Date(2020, 6, day);
+        Date now;
+        //Date before;
+        int dia=1;
+        for(int i=0; i<liste_seances.size(); i++){
+            porra=liste_seances.get(i);
+            now=(Date) porra.getDay();
+            if(now==jour){
+                System.out.println("AZERTYUIOPAZERTYUIO");
+                if(dia==1){
+                    //lundi
+                    lundi.add(porra);
+                }
+                if(dia==2){
+                    //mardi
+                    mardi.add(porra);
+                }
+                if(dia==3){
+                    //mercredi
+                    mercredi.add(porra);
+                }
+                if(dia==4){
+                    //jeudi
+                    jeudi.add(porra);
+                }
+                if(dia==5){
+                    //vendredi
+                    vendredi.add(porra);
+                }
+                if(dia==6){
+                    //samedi
+                    samedi.add(porra);
+                }
+                
+                
+            }
+            else{
+                day=day+1;
+                jour.setDate(day);
+                System.out.println(jour);
+                dia=dia+1;
+                if(dia==1){
+                    //lundi
+                    lundi.add(porra);
+                }
+                if(dia==2){
+                    //mardi
+                    mardi.add(porra);
+                }
+                if(dia==3){
+                    //mercredi
+                    mercredi.add(porra);
+                }
+                if(dia==4){
+                    //jeudi
+                    jeudi.add(porra);
+                }
+                if(dia==5){
+                    //vendredi
+                    vendredi.add(porra);
+                }
+                if(dia==6){
+                    //samedi
+                    samedi.add(porra);
+                }
+            }
+            if(dia==7){
+                dia=1;
+            }
+            
+            //fin du for
+        }
+        liste_jours.add(lundi);
+        liste_jours.add(mardi);
+        liste_jours.add(mercredi);
+        liste_jours.add(jeudi);
+        liste_jours.add(vendredi);
+        liste_jours.add(samedi);
     }
 }

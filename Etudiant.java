@@ -9,6 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.sql.Time;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,7 +28,16 @@ public class Etudiant {
     private int id_etudiant;
     private int id_groupe;
     ArrayList<Seance> liste_seances=new ArrayList<>();  //declaration d'une liste de seances
+    ArrayList<ArrayList<Seance>>liste_jours=new ArrayList<>();
     int nb_seances;
+    
+    ArrayList<Seance> lundi=new ArrayList<>();
+    ArrayList<Seance> mardi=new ArrayList<>();
+    ArrayList<Seance> mercredi=new ArrayList<>();
+    ArrayList<Seance> jeudi=new ArrayList<>();
+    ArrayList<Seance> vendredi=new ArrayList<>();
+    ArrayList<Seance> samedi=new ArrayList<>();
+        
     public Etudiant(Login entrar){
         //constructeur
         this.log=entrar;//on recupère le login de l'etudiant
@@ -85,6 +97,10 @@ public class Etudiant {
             
             //TRI DE LA LISTE DE SEANCE 
             tri();//appel de la fonction tri
+            
+            //TRI DE LA LISTE EN FONCTION DES JOURS
+            organizacao();
+            afficherSemaine();
             
         }catch (SQLException e) {
                 System.out.println("Connexion echouee : probleme SQL");
@@ -159,5 +175,134 @@ public class Etudiant {
             //on appelle la fonction afficher_seance() pour afficher les données de la seance
             liste_seances.get(i).afficher_seance();
         }
+    }
+    
+    public void afficherSemaine(){
+        //fonction pour afficher le tableau dynamique "liste_seances" en console
+        //pour chaque seance:
+        for(int i=0;i<lundi.size();i++){
+            //on appelle la fonction afficher_seance() pour afficher les données de la seance
+            System.out.println(" ");
+            System.out.println("LUNDI : ");
+            lundi.get(i).afficher_seance();
+        }
+        
+        for(int i=0;i<mardi.size();i++){
+            //on appelle la fonction afficher_seance() pour afficher les données de la seance
+            System.out.println(" ");
+            System.out.println("MARDI : ");
+            mardi.get(i).afficher_seance();
+        }
+        
+        for(int i=0;i<mercredi.size();i++){
+            //on appelle la fonction afficher_seance() pour afficher les données de la seance
+            System.out.println(" ");
+            System.out.println("MERCREDI : ");
+            mercredi.get(i).afficher_seance();
+        }
+        
+        for(int i=0;i<jeudi.size();i++){
+            //on appelle la fonction afficher_seance() pour afficher les données de la seance
+            System.out.println(" ");
+            System.out.println("JEUDI : ");
+            jeudi.get(i).afficher_seance();
+        }
+        
+        for(int i=0;i<vendredi.size();i++){
+            //on appelle la fonction afficher_seance() pour afficher les données de la seance
+            System.out.println(" ");
+            System.out.println("VENDREDI : ");
+            vendredi.get(i).afficher_seance();
+        }
+        
+        for(int i=0;i<samedi.size();i++){
+            //on appelle la fonction afficher_seance() pour afficher les données de la seance
+            System.out.println(" ");
+            System.out.println("SAMEDI : ");
+            samedi.get(i).afficher_seance();
+        }
+    }
+    
+    public void organizacao(){
+        Seance porra = new Seance();
+        int day=8;
+        Date jour=new Date(2020, 6, day);
+        Date now;
+        //Date before;
+        int dia=1;
+        for(int i=0; i<liste_seances.size(); i++){
+            porra=liste_seances.get(i);
+            now=(Date) porra.getDay();
+            if(now==jour){
+                System.out.println("AZERTYUIOPAZERTYUIO");
+                if(dia==1){
+                    //lundi
+                    lundi.add(porra);
+                }
+                if(dia==2){
+                    //mardi
+                    mardi.add(porra);
+                }
+                if(dia==3){
+                    //mercredi
+                    mercredi.add(porra);
+                }
+                if(dia==4){
+                    //jeudi
+                    jeudi.add(porra);
+                }
+                if(dia==5){
+                    //vendredi
+                    vendredi.add(porra);
+                }
+                if(dia==6){
+                    //samedi
+                    samedi.add(porra);
+                }
+                
+                
+            }
+            else{
+                day=day+1;
+                jour.setDate(day);
+                System.out.println(jour);
+                dia=dia+1;
+                if(dia==1){
+                    //lundi
+                    lundi.add(porra);
+                }
+                if(dia==2){
+                    //mardi
+                    mardi.add(porra);
+                }
+                if(dia==3){
+                    //mercredi
+                    mercredi.add(porra);
+                }
+                if(dia==4){
+                    //jeudi
+                    jeudi.add(porra);
+                }
+                if(dia==5){
+                    //vendredi
+                    vendredi.add(porra);
+                }
+                if(dia==6){
+                    //samedi
+                    samedi.add(porra);
+                }
+            }
+            if(dia==7){
+                dia=1;
+            }
+            
+            //fin du for
+        }
+        liste_jours.add(lundi);
+        liste_jours.add(mardi);
+        liste_jours.add(mercredi);
+        liste_jours.add(jeudi);
+        liste_jours.add(vendredi);
+        liste_jours.add(samedi);
     }
 }
