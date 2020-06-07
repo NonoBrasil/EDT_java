@@ -187,6 +187,30 @@ public class Seance {
   public int getType() {
     return id_type;
   }
+  
+  public String getNomCours() {
+    return cours;
+  }
+  
+  public String getNomGroupe() {
+    return groupe;
+  }
+  
+  public String getNomEnseignant() {
+    return enseignant;
+  }
+  
+  public String getNomSalle() {
+    return salle;
+  }
+  
+  public int getCapacite() {
+    return capacite;
+  }
+  
+  public String getSite() {
+    return site;
+  }
 
   // Setter
   public void setId(int newId) {
@@ -212,6 +236,29 @@ public class Seance {
   }
   public void setType(int newType) {
     this.id_type=newType;
+  }
+  public void setNomCours(String newCours) {
+    this.cours=newCours;
+  }
+  
+  public void setNomGroupe(String newGroupe) {
+    this.groupe=newGroupe;
+  }
+  
+  public void setNomEnseignant(String newProf) {
+    this.enseignant=newProf;
+  }
+  
+  public void setNomSalle(String newSalle) {
+    this.salle=newSalle;
+  }
+  
+  public void setCapacite(int newC) {
+    this.capacite=newC;
+  }
+  
+  public void setSite(String newSite) {
+    this.site=newSite;
   }
   
 }
