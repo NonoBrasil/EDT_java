@@ -7,38 +7,39 @@ package Modele;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-
 /**
  *
  * @author Noémie
  */
-public class Groupe {
+public class Cours {
     //attributs
-    private int id_groupe;
+    private int id_cours;
     Connect_base con;
     ResultSet resultSet = null;
     int nb_seances=0;
     long totalH;
     Time nb_heures;
-    public Groupe(int id){
-        //contructeur
-        id_groupe=id;
-    }
-    public void dataGroupe(){
+    public Cours(int id){
+        //constructeur
+        id_cours=id;
+    }   
+    
+    public void dataCours(){
+        System.out.println("GROUPE FONCTION LISTE COURS");
         con = new Connect_base();   //creation de la connexion a la base
         try{            
             //requete pour recuperer les sceances de l'enseignant
-            String req="SELECT id_seance FROM seance_groupes WHERE id_groupe="+id_groupe+";";
+            String req="SELECT id FROM seance WHERE id_cours="+id_cours+";";
             resultSet=con.connexion(req);
             if(resultSet!=null){
                 //recuperation de toutes les seances avec l'id du groupe
-                int id_seance=0;  //identifiant de la seance
+                int id_seance = 0;  //identifiant de la seance
                 Time horaD=null;    //heure du debut de la seance
                 Time horaF=null;    //heure de fin de la seance
                 ResultSet resultSetSeance=null;
                 while(resultSet.next()){
                     //on recupere l'id de la seance
-                    id_seance=resultSet.getInt("id_seance");
+                    id_seance=resultSet.getInt("id");
                     System.out.println("ID SEANCE : "+id_seance);
                     //requette pour recuperer toute la data de la seance
                     req="SELECT heure_debut, heure_fin FROM seance WHERE id='"+id_seance+"';";
