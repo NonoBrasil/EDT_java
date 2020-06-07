@@ -22,7 +22,7 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
  * @author LouisFieux
  */
 
-public class Connexion extends JFrame{
+public class Connexion extends JFrame  implements ActionListener{
     private final JTextField user = new JTextField();
     private final JPasswordField mdp = new JPasswordField();
     private final JButton login = new JButton("Login");
@@ -31,7 +31,7 @@ public class Connexion extends JFrame{
     private String email_value;
     private String password_value;
     
-    private boolean log = false;            //Si la personne essaie de se log
+    private boolean log;            //Si la personne essaie de se log
     
     public Connexion() {
         super("Connexion emploi du temps ECE");
@@ -40,6 +40,7 @@ public class Connexion extends JFrame{
         this.setMinimumSize(new Dimension(800, 600));   //On Donne une dimention minimum de 800 par 600
         this.setLocationRelativeTo(null);      //On décale la position originelle de la fenêtre en centrant sur le bureau
 
+        log = false;
         JPanel mainpage = (JPanel) this.getContentPane();    //On stock un JPanel qui sera la page principale
         mainpage.setLayout(new BorderLayout());
         
@@ -74,26 +75,8 @@ public class Connexion extends JFrame{
         
         JPanel choix = new JPanel(new GridLayout(1,2));
         login.setFont (login.getFont ().deriveFont (fontsize-10));
-        login.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                email_value = user.getText();
-                password_value = mdp.getText();
-                log = true;
-                if((email_value.equals("Paul"))&&(password_value.equals("mdp"))){       //Test des identifiants
-                    //System.out.println(email_value+" "+password_value);
-                    Graphique g = null;
-                    try {
-                        g = new Graphique(1);
-                    } catch (ParseException ex) {
-                        Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    g.setVisible(true);
-                    dispose();
-                }
-                //System.out.println(email+" "+password);
-            }
-        });
+        login.addActionListener(this);
+                
         choix.add(login);
         
         annuler.setFont (annuler.getFont ().deriveFont (fontsize-10));
@@ -107,6 +90,24 @@ public class Connexion extends JFrame{
         body.add(choix);
         
         return body;
+    }
+    
+    public void actionPerformed(ActionEvent ae) {
+        email_value = user.getText();
+        password_value = mdp.getText();
+        log = true;
+        if((email_value.equals("Paul"))&&(password_value.equals("mdp"))){       //Test des identifiants
+            //System.out.println(email_value+" "+password_value);
+            Graphique g = null;
+            try {
+                g = new Graphique(1);
+            } catch (ParseException ex) {
+                Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            g.setVisible(true);
+            dispose();
+        }
+                //System.out.println(email+" "+password);
     }
     
     //Getters
@@ -124,16 +125,5 @@ public class Connexion extends JFrame{
     
     public void setlog(boolean bool){
         log = bool;
-    }
-    
-    public static void main(String[] args) throws Exception
-    {
-        NimbusLookAndFeel nimbus = new NimbusLookAndFeel();
-        UIManager.setLookAndFeel( nimbus );
-        
-        Connexion window = new Connexion();
-        window.setBackground(Color.white);
-        window.setVisible(true);
-                
     }
 }

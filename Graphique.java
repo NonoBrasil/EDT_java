@@ -71,7 +71,6 @@ public class Graphique extends JFrame {
     private JMenuBar createMenuBar(){
         JMenuBar menuBar = new JMenuBar();
         
-        
         return menuBar;
     }
     
@@ -130,7 +129,7 @@ public class Graphique extends JFrame {
             }
         });
         tb.add(typeAction);
-        if(userRight==1)
+        if(userRight!=4)
             tb.add(userAction);
         
         return tb;
@@ -204,13 +203,7 @@ public class Graphique extends JFrame {
             
             for(int u = 0 ; u < liste_seances.get(j).size(); u++){
                 if (t.equals(liste_seances.get(j).get(u).getTimeD())){
-                    text=liste_seances.get(j).get(u).getId()+", "+liste_seances.get(j).get(u).getEtat();
-                    /*private String cours;   //nom du cours
-                    private String groupe;  //nom du groupe
-                    private String enseignant;  //nom de l'enseignant
-                    private String salle;   //nom de la salle
-                    private int capacite;
-                    private String site;*/
+                    text=liste_seances.get(j).get(u).getNomCours()+", "+liste_seances.get(j).get(u).getNomEnseignant()+", "+liste_seances.get(j).get(u).getNomGroupe()+", "+liste_seances.get(j).get(u).getNomSalle()+", "+liste_seances.get(j).get(u).getSite()+", "+liste_seances.get(j).get(u).getCapacite();
                     col = getCol(liste_seances.get(j).get(u).getCours());
                 }
             }
@@ -275,7 +268,7 @@ public class Graphique extends JFrame {
         String text;
         for(int j = 0 ; j < liste_seances.size(); j++){
             for(int u = 0 ; u < liste_seances.get(j).size(); u++){
-                text=liste_seances.get(j).get(u).getId()+", "+liste_seances.get(j).get(u).getEtat();
+                text=liste_seances.get(j).get(u).getNomCours()+", "+liste_seances.get(j).get(u).getNomEnseignant()+", "+liste_seances.get(j).get(u).getNomGroupe()+", "+liste_seances.get(j).get(u).getNomSalle()+", "+liste_seances.get(j).get(u).getSite()+", "+liste_seances.get(j).get(u).getCapacite();
                 list.add(new JLabel(text));
             }
         }
