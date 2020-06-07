@@ -16,7 +16,9 @@ public class Login {
     ResultSet resultSet = null;
     //numero d'identifiant de l'utilisateur
     private int identifiant;
+    private int num_droit;
     Connect_base con;   //creation de la connexion de la base
+    //Connexion vue = new Connexion();
     
     public Login(){
         //constructeur
@@ -35,39 +37,33 @@ public class Login {
             con = new Connect_base();
             //recuperation du resultat de la requete
             resultSet=con.connexion(req);
-            System.out.println(resultSet);
-            //on passe à la ligne suivante car titre des variables
-            resultSet.next();
-            //on recupère l'id de l'utilisateur
-            int num_id= resultSet.getInt("id");
-            System.out.println("ID utilisateur connecté: "+num_id);
-            identifiant=num_id;
-            //DEFINIR LE TYPE D'UTILISATEUR
-            req="SELECT droit FROM utilisateur WHERE (id='"+num_id+"');";
-            resultSet = con.connexion(req);
-            //on passe à la ligne suivante car titre des variables
-            resultSet.next();
-            //on recupère le droit de l'utilisateur
-            int num_droit= resultSet.getInt("droit");
-            System.out.println("Droit de l'utilisateur: "+num_droit);
-            //redirection vers la classe de l'utilisateur en fonction de ses droits
-            switch(num_droit) {
-                case 1:
-                    // cas droit administrateur
-                    break;
-                case 2:
-                    // cas droit referent pedagogique
-                break;
-                case 3:
-                    // cas droit enseignant
-                    break;
-                case 4:
-                    // cas droit etudiant
-                    
-                break;
-                
+            if(resultSet!=null){
+                //il a correspondance donc il y a connexion dans le compte de l'utilisateur
+                //vue.setlogfalse(true);
+                //fermer la fenetre connexion
+                System.out.println(resultSet);
+                //on passe à la ligne suivante car titre des variables
+                resultSet.next();
+                //on recupère l'id de l'utilisateur
+                int num_id= resultSet.getInt("id");
+                System.out.println("ID utilisateur connecté: "+num_id);
+                identifiant=num_id;
+                //DEFINIR LE TYPE D'UTILISATEUR
+                req="SELECT droit FROM utilisateur WHERE (id='"+num_id+"');";
+                resultSet = con.connexion(req);
+                //on passe à la ligne suivante car titre des variables
+                resultSet.next();
+                //on recupère le droit de l'utilisateur
+                num_droit= resultSet.getInt("droit");
+                System.out.println("Droit de l'utilisateur: "+num_droit);
+                //redirection vers la classe de l'utilisateur en fonction de ses droits
             }
-                
+            else{
+                //pas de match, mauvais mail ou mauvais mot de passe
+                //faire un set pour modifier une variable chez paul
+                //vue.setlogfalse(false);
+            }
+                            
         }catch (SQLException e) {
                 System.out.println("Connexion echouee : probleme SQL");
                 e.printStackTrace();
@@ -78,4 +74,10 @@ public class Login {
     public int getIdentifiant() {
         return identifiant; //retourne l'identifiant de l'utilisateur connecté
     }
+    
+    // Getter pour du droit
+    public int getDroit() {
+        return num_droit; //retourne l'identifiant de l'utilisateur connecté
+    }
+    
 }
