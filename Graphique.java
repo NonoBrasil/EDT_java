@@ -10,7 +10,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 
 public class Graphique extends JFrame {
@@ -23,7 +28,7 @@ public class Graphique extends JFrame {
     ArrayList<ArrayList<Seance>> liste_seances=new ArrayList<>();  //declaration d'une liste de seances
     int userRight;
             
-    public Graphique(int droit) {
+    public Graphique(int droit) throws ParseException {
 
         super("Emploi du temps ECE");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //On arrête les processus de la fenêtre en ne fermant le programme que quand la dernière fenêtre est encore ouverte
@@ -43,7 +48,7 @@ public class Graphique extends JFrame {
             
     }
     
-    private void grid (){
+    private void grid () throws ParseException{
         mainpage.removeAll();
         mainpage.add(createtoolbar(),BorderLayout.NORTH);
         mainpage.add(createhour(),BorderLayout.WEST);
@@ -91,7 +96,11 @@ public class Graphique extends JFrame {
                     else{
                         grille=true;
                         edt=true;
-                        grid();
+                        try {
+                            grid();
+                        } catch (ParseException ex) {
+                            Logger.getLogger(Graphique.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     
                 }
@@ -110,7 +119,11 @@ public class Graphique extends JFrame {
                     else{
                         edt=true;
                         grille=true;
-                        grid();
+                        try {
+                            grid();
+                        } catch (ParseException ex) {
+                            Logger.getLogger(Graphique.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     
                 }
@@ -124,7 +137,7 @@ public class Graphique extends JFrame {
     }
     
     //Initialise la grille d'une semaine
-    private JPanel createweek(){      
+    private JPanel createweek() throws ParseException{      
         JPanel semaine = new JPanel(new GridLayout(1,6)); //On créé un Panel avec 24 case en grid
         
         for (int i=0;i<6;i++){
@@ -165,11 +178,13 @@ public class Graphique extends JFrame {
     }
     
     //Initialise la grille d'une journée
-    private JPanel createday(int j){       
+    private JPanel createday(int j) throws ParseException{       
         JPanel jour = new JPanel(new GridLayout(15,1)); //On créé un Panel avec 14 case en grid
         javax.swing.border.Border border = BorderFactory.createLineBorder(Color.black, 1);      //On définit la bordure
         String hour;
         String text;
+        DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+        java.sql.Time t;
         JLabel cours;
         String day = getDay(j);
         day+= " " + String.valueOf(j);
@@ -181,11 +196,21 @@ public class Graphique extends JFrame {
         for (int i=0;i<13;i++){                         //On créé les 13 cases par jour (0==8h30 et 12==20h30)
             hour = "";
             text="";
+            
+            hour=i+8+":30:00";
+                
+            t = new java.sql.Time(formatter.parse(hour).getTime());
             Color col=Color.lightGray;
-            hour=8+i+"h30";
+            
             for(int u = 0 ; u < liste_seances.get(j).size(); u++){
-                if (hour.equals(liste_seances.get(j).get(u).getTimeD())){
+                if (t.equals(liste_seances.get(j).get(u).getTimeD())){
                     text=liste_seances.get(j).get(u).getId()+", "+liste_seances.get(j).get(u).getEtat();
+                    /*private String cours;   //nom du cours
+                    private String groupe;  //nom du groupe
+                    private String enseignant;  //nom de l'enseignant
+                    private String salle;   //nom de la salle
+                    private int capacite;
+                    private String site;*/
                     col = getCol(liste_seances.get(j).get(u).getCours());
                 }
             }
@@ -263,23 +288,30 @@ public class Graphique extends JFrame {
         dispose();
     }
     
-    private void remplirtest(){
+    private void remplirtest() throws ParseException{
         Seance s = new Seance();
         Seance s2 = new Seance();
         
         for(int j = 0 ; j < 6; j++){
             liste_seances.add(new ArrayList<>());
         }
+        DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+        java.sql.Time t;
+        java.sql.Time t2;
+        
+        t = new java.sql.Time(formatter.parse("17:30:00").getTime());
+        t2 = new java.sql.Time(formatter.parse("08:30:00").getTime());
         
         s.setId(0);
         s.setCours(0);
-        s.setTimeD("9h30");
+        s.setTimeD(t);
         s.setEtat(1);
         liste_seances.get(1).add(s);
         
         s2.setId(1);
         s2.setCours(1);
-        s2.setTimeD("18h30");
+        s2.setTimeD(t2);
+        
         s2.setEtat(1);
         liste_seances.get(1).add(s2);
     }

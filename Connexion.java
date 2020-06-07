@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -79,7 +82,12 @@ public class Connexion extends JFrame{
                 log = true;
                 if((email_value.equals("Paul"))&&(password_value.equals("mdp"))){       //Test des identifiants
                     //System.out.println(email_value+" "+password_value);
-                    Graphique g = new Graphique(1);
+                    Graphique g = null;
+                    try {
+                        g = new Graphique(1);
+                    } catch (ParseException ex) {
+                        Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     g.setVisible(true);
                     dispose();
                 }
