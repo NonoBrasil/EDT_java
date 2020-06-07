@@ -25,11 +25,7 @@ public class Connect_base {
         
     }
     
-    public ResultSet connexion(String requete){
-        //IDENTIFIANT ENTRE DANS LE FORMULAIRE DE CONNEXION
-        String ident="segado@edu.ece.fr";
-        //MOT DE PASSE ENTRE DANS LE FORMULAIRE DE CONNEXION
-        String mdp="jp";
+    public ResultSet connexionBase(String requete){
         try{
             //création d'une connexion JDBC à la base 
             maconnexion = DriverManager.getConnection(url, user, pass);

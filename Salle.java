@@ -34,7 +34,7 @@ public class Salle {
         try{ 
             //requete pour recuperer les sceances de l'enseignant
             String req="SELECT id_seance FROM seance_salles WHERE id_salle="+id_salle+";";
-            resultSet=con.connexion(req);
+            resultSet=con.connexionBase(req);
             if(resultSet!=null){
                 //recuperation de toutes les seances avec l'id de la salle
                 int id_seance = 0;
@@ -46,7 +46,7 @@ public class Salle {
                     //requette pour recuperer toute la data de la seance
                     req="SELECT * FROM seance WHERE id='"+id_seance+"';";
                     //recuperation de la reponse de la requette
-                    resultSetSeance=con.connexion(req);
+                    resultSetSeance=con.connexionBase(req);
                     //on passe à la ligne suivante car titre des variables
                     resultSetSeance.next();
                     //creation d'une seance

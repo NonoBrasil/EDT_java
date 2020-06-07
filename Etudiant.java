@@ -50,15 +50,15 @@ public class Etudiant {
             
             //requete pour le groupe de l'étudiant
             String req = "SELECT id_groupe FROM etudiant WHERE (id_utilisateur="+id_etudiant+");";
-            resultSet=con.connexion(req);
+            resultSet=con.connexionBase(req);
             //on passe à la ligne suivante car titre des variables
             resultSet.next();
             //on recupère le groupe de l'etudiant
-            this.id_groupe=resultSet.getInt("id_groupe");
+            id_groupe=resultSet.getInt("id_groupe");
             
             //requete pour recuperer les sceances du groupe
             req="SELECT id_seance FROM seance_groupes WHERE id_groupe="+id_groupe+";";
-            resultSet=con.connexion(req);
+            resultSet=con.connexionBase(req);
             //recuperation de toutes les seances avec l'id de la seance
             int id_seance = 0;
             ResultSet resultSetSeance=null;
@@ -69,7 +69,7 @@ public class Etudiant {
                 //requette pour recuperer toute la data de la seance
                 req="SELECT * FROM seance WHERE id='"+id_seance+"';";
                 //recuperation de la reponse de la requette
-                resultSetSeance=con.connexion(req);
+                resultSetSeance=con.connexionBase(req);
                 //on passe à la ligne suivante car titre des variables
                 resultSetSeance.next();
                 //creation d'une seance

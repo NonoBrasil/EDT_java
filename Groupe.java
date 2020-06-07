@@ -29,7 +29,7 @@ public class Groupe {
         try{            
             //requete pour recuperer les sceances de l'enseignant
             String req="SELECT id_seance FROM seance_groupes WHERE id_groupe="+id_groupe+";";
-            resultSet=con.connexion(req);
+            resultSet=con.connexionBase(req);
             if(resultSet!=null){
                 //recuperation de toutes les seances avec l'id du groupe
                 int id_seance=0;  //identifiant de la seance
@@ -43,7 +43,7 @@ public class Groupe {
                     //requette pour recuperer toute la data de la seance
                     req="SELECT heure_debut, heure_fin FROM seance WHERE id='"+id_seance+"';";
                     //recuperation de la reponse de la requette
-                    resultSetSeance=con.connexion(req);
+                    resultSetSeance=con.connexionBase(req);
                     if(resultSetSeance!=null){
                         //on passe à la ligne suivante car titre des variables
                         resultSetSeance.next();

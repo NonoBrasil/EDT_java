@@ -45,7 +45,7 @@ public class Enseignant {
         try{            
             //requete pour recuperer les sceances de l'enseignant
             String req="SELECT id_seance FROM seance_enseignants WHERE id_enseignant="+id_enseignant+";";
-            resultSet=con.connexion(req);
+            resultSet=con.connexionBase(req);
             //recuperation de toutes les seances avec l'id de l'enseignant
             int id_seance = 0;
             ResultSet resultSetSeance=null;
@@ -56,7 +56,7 @@ public class Enseignant {
                 //requette pour recuperer toute la data de la seance
                 req="SELECT * FROM seance WHERE id='"+id_seance+"';";
                 //recuperation de la reponse de la requette
-                resultSetSeance=con.connexion(req);
+                resultSetSeance=con.connexionBase(req);
                 //on passe à la ligne suivante car titre des variables
                 resultSetSeance.next();
                 //creation d'une seance
@@ -173,18 +173,18 @@ public class Enseignant {
         try{
             //requete pour recuperer les sceances de l'enseignant
             String req="SELECT id_cours FROM enseignant WHERE id_utilisateur="+id_enseignant+";";
-            ResultSet resultSet=con.connexion(req);
+            ResultSet resultSet=con.connexionBase(req);
             if(resultSet!=null){
             //si le resultat de la requette n'est pas nul
             while(resultSet.next()){
                 id_cours=resultSet.getInt("id_cours");
                 String req2 = "SELECT id FROM seance WHERE id_cours="+id_cours+";";
-                ResultSet resultSet2 = con.connexion(req2);
+                ResultSet resultSet2 = con.connexionBase(req2);
                 if(resultSet2!=null){
                     while(resultSet2.next()){
                         id_seance=resultSet2.getInt("id");
                         String req3="SELECT id_groupe FROM seance_groupes WHERE id_seance="+id_seance+";";
-                        ResultSet resultSet3 = con.connexion(req3);
+                        ResultSet resultSet3 = con.connexionBase(req3);
                         if(resultSet3!=null){
                             while(resultSet2.next()){
                                 id_groupe=resultSet3.getInt("id_groupe");
@@ -194,7 +194,7 @@ public class Enseignant {
                                 String duree;
                                 String nb;
                                 String req4="SELECT nom FROM cours WHERE id="+id_cours+";";
-                                ResultSet resultSet4 = con.connexion(req3);
+                                ResultSet resultSet4 = con.connexionBase(req3);
                                 if(resultSet4!=null){
                                     resultSet4.next();
                                     matiere=resultSet4.getString("nom");
