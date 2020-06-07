@@ -4,6 +4,7 @@ package Vue;
  * @author paulm
 */
 
+import Model.Groupe;
 import Model.Seance;
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +17,13 @@ public class Graphique extends JFrame {
 
     //Initialise la page vue par l'utilisateur
     private boolean grille = true;
+    private boolean edt = true;
+    private int groupe;
     JPanel mainpage;
     ArrayList<ArrayList<Seance>> liste_seances=new ArrayList<>();  //declaration d'une liste de seances
+    int userRight;
             
-    public Graphique() {
+    public Graphique(int droit) {
 
         super("Emploi du temps ECE");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //On arrête les processus de la fenêtre en ne fermant le programme que quand la dernière fenêtre est encore ouverte
@@ -27,6 +31,9 @@ public class Graphique extends JFrame {
         this.setMinimumSize(new Dimension(800, 600));   //On Donne une dimention minimum de 800 par 600
         this.setLocationRelativeTo(null);      //On décale la position originelle de la fenêtre en centrant sur le bureau
         this.getContentPane().setBackground( Color.white );
+        
+        userRight=droit;
+        groupe=1;
         
         remplirtest();
         this.setJMenuBar(createMenuBar());
@@ -49,6 +56,12 @@ public class Graphique extends JFrame {
         mainpage.add(createlist(),BorderLayout.CENTER);
     }
     
+    private void report(){
+        mainpage.removeAll();
+        mainpage.add(createtoolbar(),BorderLayout.NORTH);
+        mainpage.add(createReport(),BorderLayout.CENTER);
+    }
+    
     //Initialise la barre de menu
     private JMenuBar createMenuBar(){
         JMenuBar menuBar = new JMenuBar();
@@ -60,7 +73,7 @@ public class Graphique extends JFrame {
     //Initialise la barre d'outil avec le choix du type d'affichage
     private JToolBar createtoolbar(){
         String[] typeAffStrings = { "En grille", "En liste"};   //Type d'affichage
-        String[] utilisateurStrings = { "Paul Moquin", "TD 11", "Salle 415"};   //Utilisateur
+        String[] utilisateurStrings = { "Paul Moquin", "Groupe"};   //Utilisateur
         JToolBar tb = new JToolBar();
         JComboBox typeAction = new JComboBox(typeAffStrings);
         JComboBox userAction = new JComboBox(utilisateurStrings);
@@ -72,9 +85,30 @@ public class Graphique extends JFrame {
                 if (ae.getStateChange() == ItemEvent.SELECTED) {
                     if(ae.getItem().equals("En liste")){
                         grille=false;
+                        edt=true;
                         liste();
                     }
                     else{
+                        grille=true;
+                        edt=true;
+                        grid();
+                    }
+                    
+                }
+            }
+        });
+        if(!edt)
+            userAction.setSelectedIndex(1);
+        userAction.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent ae) {
+                if (ae.getStateChange() == ItemEvent.SELECTED) {
+                    if(ae.getItem().equals("Groupe")){
+                        edt=false;
+                        report();
+                    }
+                    else{
+                        edt=true;
                         grille=true;
                         grid();
                     }
@@ -83,7 +117,9 @@ public class Graphique extends JFrame {
             }
         });
         tb.add(typeAction);
-        tb.add(userAction);
+        if(userRight==1)
+            tb.add(userAction);
+        
         return tb;
     }
     
@@ -246,6 +282,35 @@ public class Graphique extends JFrame {
         s2.setTimeD("18h30");
         s2.setEtat(1);
         liste_seances.get(1).add(s2);
+    }
+    
+    //Créé l'écran de reporting
+    private JPanel createReport(){
+        JPanel rp = new JPanel(new BorderLayout());
+        ArrayList<JButton> b =new ArrayList<>();
+        String[] tdString = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};   //TD
+        
+        JComboBox tdAction = new JComboBox(tdString);
+        tdAction.setSelectedIndex(groupe-1);
+        tdAction.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent ae) {
+                if (ae.getStateChange() == ItemEvent.SELECTED) {
+                    groupe=Integer.parseInt((String) ae.getItem());
+                    report();
+                }
+            }
+        });
+        rp.add(tdAction, BorderLayout.NORTH);
+        Groupe td = new Groupe(groupe);
+        td.dataGroupe();
+        JLabel info = new JLabel("NOMBRE D'HEURES: "+td.getHeures()+"      "+"NOMBRE DE SEANCES: "+td.getSeances(),SwingConstants.CENTER);
+        
+        //info.setHorizontalAlignment(WIDTH);
+        info.setFont (info.getFont ().deriveFont (30.0f));
+        rp.add(info, BorderLayout.CENTER);
+        
+        return rp;
     }
     
     /*public static void main(String[] args) throws Exception

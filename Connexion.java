@@ -16,7 +16,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 /**
- * @author paulm
+ * @author LouisFieux
  */
 
 public class Connexion extends JFrame{
@@ -79,7 +79,7 @@ public class Connexion extends JFrame{
                 log = true;
                 if((email_value.equals("Paul"))&&(password_value.equals("mdp"))){       //Test des identifiants
                     //System.out.println(email_value+" "+password_value);
-                    Graphique g = new Graphique();
+                    Graphique g = new Graphique(1);
                     g.setVisible(true);
                     dispose();
                 }
