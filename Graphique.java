@@ -208,9 +208,9 @@ public class Graphique extends JFrame {
         return col;
     }
     
-    //En cours d'implementation
-    private JPanel createlist(){
-        JPanel list = new JPanel(new GridLayout(liste_seances.size(),0));       //On créé une grille avec le nombre de cours
+    //Créé l'affichage en liste
+    private JScrollPane createlist(){
+        JPanel list = new JPanel(new GridLayout(liste_seances.size()*6,0));       //On créé une grille avec le nombre de cours
         String text;
         for(int j = 0 ; j < liste_seances.size(); j++){
             for(int u = 0 ; u < liste_seances.get(j).size(); u++){
@@ -218,10 +218,14 @@ public class Graphique extends JFrame {
                 list.add(new JLabel(text));
             }
         }
-        
-        return list;
+       JScrollPane scroll=new JScrollPane(list);
+        return scroll;
     }
     
+    //Permet de fermer la fenêtre
+    public void disposeScreen(){
+        dispose();
+    }
     
     private void remplirtest(){
         Seance s = new Seance();

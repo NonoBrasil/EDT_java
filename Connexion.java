@@ -114,8 +114,8 @@ public class Connexion extends JFrame{
         return log;
     }
     
-    public void setlogfalse(){
-        log = false;
+    public void setlog(boolean bool){
+        log = bool;
     }
     
     public static void main(String[] args) throws Exception
